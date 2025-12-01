@@ -14,6 +14,7 @@
 # Run cleanup every 4 hours
 0 */4 * * * /Users/thomascamminady/Dev/cronjobs/cleanup_dmg.sh
 
-# Run merge_parquet_files.py every hour at minute 10
-*/15 * * * * /opt/homebrew/bin/uv run /Users/thomascamminady/Dev/cronjobs/process_rungap.py >> /tmp/run_gap.log 2>&1
+# Run merge_parquet_files.py every 10 minutes
+*/10 * * * * /opt/homebrew/bin/uv run /Users/thomascamminady/Dev/cronjobs/process_rungap.py >> /tmp/run_gap.log 2>&1
 ```
+
