@@ -26,7 +26,7 @@ def parse(rungap_source: str, rungap_destination, logging_level: int) -> bool:
     parser = Parser()
     files = glob.glob(f"{rungap_source}/*.fit")
     files.sort(reverse=True)
-    logging.info(f"Found {len(files)} files")
+    counter = 0
     for index, file in enumerate(files):
         filename = os.path.basename(file)
         destination = os.path.join(destination_root, filename)
@@ -41,12 +41,13 @@ def parse(rungap_source: str, rungap_destination, logging_level: int) -> bool:
                     f"Parsed {index + 1}/{len(files)}: {filename} to {destination}"
                 )
                 has_new_file_been_parsed = True
+                counter += 1
             except Exception as e:
                 logging.info(f"Error parsing {filename}: {e}")
-        else:
-            logging.info(
-                f"Skipping {index + 1}/{len(files)}: {filename}, already parsed."
-            )
+    if not has_new_file_been_parsed:
+        logging.info("No new files to parse")
+    else:
+        logging.info(f"Parsed {counter} new files")
     return has_new_file_been_parsed
 
 
@@ -78,7 +79,11 @@ def main(
 ):
     new_file = parse(rungap_source, rungap_destination, logging_level)
     if new_file:
+        logging.info("Merging files...")
         merge(rungap_source, rungap_destination, logging_level)
+        logging.info("Merging done.")
+    else:
+        logging.info("No new files to merge.")
 
 
 if __name__ == "__main__":
