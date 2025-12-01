@@ -10,6 +10,7 @@
 # pyright: reportMissingModuleSource=false
 # pyright: reportMissingImports=false
 
+import datetime
 import glob
 import logging
 import os
@@ -20,7 +21,6 @@ from fit2parquets.parser import Parser
 
 
 def parse(rungap_source: str, rungap_destination, logging_level: int) -> bool:
-    logging.basicConfig(level=logging_level)
     destination_root = os.path.join(rungap_destination, "export")
     has_new_file_been_parsed = False
     parser = Parser()
@@ -52,7 +52,6 @@ def parse(rungap_source: str, rungap_destination, logging_level: int) -> bool:
 
 
 def merge(rungap_source: str, rungap_destination: str, logging_level: int):
-    logging.basicConfig(level=logging_level)
     destination_root = os.path.join(rungap_destination, "export")
     destination_merged = os.path.join(rungap_destination, "merged")
     mesgs = {
@@ -77,6 +76,9 @@ def main(
     rungap_destination: str = "/Users/thomascamminady/Data/rungap",
     logging_level: int = logging.DEBUG,
 ):
+    logging.basicConfig(level=logging_level)
+    current_timestamp = datetime.datetime.now().isoformat()
+    logging.info(f"Process started at {current_timestamp}")
     new_file = parse(rungap_source, rungap_destination, logging_level)
     if new_file:
         logging.info("Merging files...")
