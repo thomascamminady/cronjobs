@@ -62,7 +62,7 @@ def merge(rungap_source: str, rungap_destination: str, logging_level: int):
     for mesg in mesgs:
         df = pl.concat(
             (
-                pl.scan_parquet(f).with_columns(file=f.split("/")[-2])
+                pl.scan_parquet(f).with_columns(file=pl.lit(f.split("/")[-2]))
                 for f in glob.glob(destination_root + f"/**/{mesg}.parquet")
             ),
             how="diagonal_relaxed",
